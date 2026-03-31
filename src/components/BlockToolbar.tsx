@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Check, X, ChevronDown, UserCheck } from 'lucide-react';
+import { Check, X, ChevronDown } from 'lucide-react';
 import type { Block } from '../types';
 
 interface BlockToolbarProps {
@@ -10,6 +10,40 @@ interface BlockToolbarProps {
 const PRESET_COLORS = [
   '#4F00C1', '#E34033', '#FFA35E', '#F9DB60', '#9ED36D',
   '#02CBEF', '#FF6B9D', '#393939',
+];
+
+function StatusIcon({ id, color, size = 14 }: { id: string; color: string; size?: number }) {
+  if (id === 'to-do') return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="7" cy="7" r="5.5" stroke={color} strokeWidth="1.6" strokeDasharray="2.6 2.2" strokeLinecap="round" />
+    </svg>
+  );
+  if (id === 'in-progress') return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="7" cy="7" r="5.5" stroke={color} strokeWidth="1.6" opacity="0.2" />
+      <path d="M7 1.5 A5.5 5.5 0 1 1 2.2 10.3" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+  if (id === 'on-hold') return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="7" cy="7" r="5.5" stroke={color} strokeWidth="1.6" />
+      <line x1="4.2" y1="7" x2="9.8" y2="7" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+  if (id === 'done') return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="7" cy="7" r="6.5" fill={color} />
+      <path d="M4.5 7L6.2 8.8L9.5 5.2" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+  return null;
+}
+
+const STATUS_OPTIONS: { value: Block['status']; label: string; id: string; color: string }[] = [
+  { value: 'to-do', label: 'To Do', id: 'to-do', color: '#A0A0A0' },
+  { value: 'in-progress', label: 'In Progress', id: 'in-progress', color: '#2563EB' },
+  { value: 'on-hold', label: 'On Hold', id: 'on-hold', color: '#DC2626' },
+  { value: 'done', label: 'Done', id: 'done', color: '#4F00C1' },
 ];
 
 const MOCK_ASSIGNEES = [
@@ -92,25 +126,26 @@ function NotesIcon() {
 function CheckboxIcon({ checked }: { checked: boolean }) {
   if (checked) {
     return (
-      <div className="w-[14.5px] h-[14.5px] rounded bg-purple-700 flex items-center justify-center">
-        <Check size={10} className="text-white" strokeWidth={3} />
-      </div>
+      <svg width="16" height="16" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+        <circle cx="7" cy="7" r="6.5" fill="#4F00C1" />
+        <path d="M4.5 7L6.2 8.8L9.5 5.2" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     );
   }
   return (
-    <div
-      className="w-[14.5px] h-[14.5px] rounded"
-      style={{ border: '1.5px solid #393939' }}
-    />
+    <svg width="16" height="16" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="7" cy="7" r="5.5" stroke="#393939" strokeWidth="1.5" />
+    </svg>
   );
 }
 
-function ApprovalIcon() {
+function ApprovalIcon({ active }: { active?: boolean }) {
+  const color = active ? '#4F00C1' : '#393939';
   return (
     <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
-      <path d="M0 18C0 16.46 0.444 14.953 1.279 13.66C2.115 12.366 3.305 11.342 4.709 10.708C6.112 10.075 7.668 9.86 9.191 10.089C10.713 10.318 12.137 10.981 13.292 12" stroke="#4F00C1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M8 10C10.761 10 13 7.761 13 5C13 2.239 10.761 0 8 0C5.239 0 3 2.239 3 5C3 7.761 5.239 10 8 10Z" stroke="#4F00C1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M14 16L16 18L20 14" stroke="#4F00C1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M0 18C0 16.46 0.444 14.953 1.279 13.66C2.115 12.366 3.305 11.342 4.709 10.708C6.112 10.075 7.668 9.86 9.191 10.089C10.713 10.318 12.137 10.981 13.292 12" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8 10C10.761 10 13 7.761 13 5C13 2.239 10.761 0 8 0C5.239 0 3 2.239 3 5C3 7.761 5.239 10 8 10Z" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14 16L16 18L20 14" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -155,22 +190,25 @@ function ToolbarItem({
 
 // ─── Main Toolbar ───
 
-export function BlockToolbar({ block, onUpdate }: BlockToolbarProps) {
+export function BlockToolbar({ block, onUpdate, onOpenActivity }: BlockToolbarProps & { onOpenActivity?: () => void }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showAssignee, setShowAssignee] = useState(false);
-  const [showApproval, setShowApproval] = useState(false);
+  const [showApprovalMenu, setShowApprovalMenu] = useState(false);
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
   const colorRef = useRef<HTMLDivElement>(null);
   const dateRef = useRef<HTMLDivElement>(null);
   const assigneeRef = useRef<HTMLDivElement>(null);
   const approvalRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (colorRef.current && !colorRef.current.contains(e.target as Node)) setShowColorPicker(false);
       if (dateRef.current && !dateRef.current.contains(e.target as Node)) setShowDatePicker(false);
       if (assigneeRef.current && !assigneeRef.current.contains(e.target as Node)) setShowAssignee(false);
-      if (approvalRef.current && !approvalRef.current.contains(e.target as Node)) setShowApproval(false);
+      if (approvalRef.current && !approvalRef.current.contains(e.target as Node)) setShowApprovalMenu(false);
+      if (statusRef.current && !statusRef.current.contains(e.target as Node)) setShowStatusMenu(false);
     }
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
@@ -180,10 +218,9 @@ export function BlockToolbar({ block, onUpdate }: BlockToolbarProps) {
     setShowColorPicker(false);
     setShowDatePicker(false);
     setShowAssignee(false);
-    setShowApproval(false);
+    setShowApprovalMenu(false);
+    setShowStatusMenu(false);
   };
-
-  const approvalStatus = block.approval?.status || 'none';
 
   return (
     <div
@@ -345,52 +382,101 @@ export function BlockToolbar({ block, onUpdate }: BlockToolbarProps) {
         )}
       </div>
 
-      {/* Checkbox — Mark complete */}
-      <ToolbarItem
-        onClick={() => onUpdate(block.id, { completed: !block.completed })}
-        title="Mark complete"
-      >
-        <CheckboxIcon checked={!!block.completed} />
-      </ToolbarItem>
+      {/* Status */}
+      <div className="relative" ref={statusRef}>
+        <ToolbarItem
+          onClick={() => {
+            if (block.status) {
+              closeAll();
+              setShowStatusMenu(!showStatusMenu);
+            } else {
+              onUpdate(block.id, { status: 'to-do' });
+            }
+          }}
+          title={block.status ? 'Change status' : 'Add status'}
+          bgColor={block.status ? 'bg-[#F5F5F5] hover:bg-gray-100' : 'bg-white/80 hover:bg-gray-50'}
+        >
+          <CheckboxIcon checked={!!block.status} />
+        </ToolbarItem>
+        {showStatusMenu && (
+          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 z-50 w-[180px]">
+            {STATUS_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => {
+                  onUpdate(block.id, { status: opt.value });
+                  setShowStatusMenu(false);
+                }}
+                className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${block.status === opt.value ? 'bg-gray-50' : ''}`}
+              >
+                <StatusIcon id={opt.id} color={opt.color} />
+                <span className="text-gray-900 font-medium">{opt.label}</span>
+                {block.status === opt.value && <Check size={14} className="text-purple-700 ml-auto" />}
+              </button>
+            ))}
+            <div className="mx-3 border-t border-gray-100 my-1" />
+            <button
+              onClick={() => {
+                onUpdate(block.id, { status: undefined });
+                setShowStatusMenu(false);
+              }}
+              className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-400 hover:bg-gray-50 transition-colors"
+            >
+              <X size={14} />
+              <span>Remove status</span>
+            </button>
+          </div>
+        )}
+      </div>
 
       <Divider />
 
       {/* Approval */}
       <div className="relative" ref={approvalRef}>
         <ToolbarItem
-          onClick={() => { closeAll(); setShowApproval(!showApproval); }}
-          title="Approval"
-          bgColor="bg-[#F8F5FD] hover:bg-purple-100"
+          onClick={() => {
+            const hasRequest = block.approval?.status === 'pending' || block.approval?.status === 'approved';
+            if (hasRequest) {
+              closeAll();
+              setShowApprovalMenu(!showApprovalMenu);
+            } else {
+              onUpdate(block.id, {
+                approval: { status: 'pending', assignees: [] },
+              });
+            }
+          }}
+          title={block.approval?.status === 'pending' || block.approval?.status === 'approved' ? 'Approval options' : 'Add approval request'}
+          bgColor={block.approval?.status === 'pending' || block.approval?.status === 'approved' ? 'bg-[#F8F5FD] hover:bg-purple-100' : 'bg-white/80 hover:bg-gray-50'}
         >
-          <ApprovalIcon />
+          <ApprovalIcon active={block.approval?.status === 'pending' || block.approval?.status === 'approved'} />
         </ToolbarItem>
-        {showApproval && (
-          <div className="absolute bottom-full mb-2 right-0 bg-white border border-gray-100 rounded-2xl shadow-lg py-2 z-50 w-[200px]">
-            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Approval status</p>
-            {(['none', 'pending', 'approved'] as const).map((status) => (
-              <button
-                key={status}
-                onClick={() => {
-                  onUpdate(block.id, {
-                    approval: {
-                      status,
-                      assignees: block.approval?.assignees || [],
-                    },
-                  });
-                  setShowApproval(false);
-                }}
-                className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${approvalStatus === status ? 'bg-purple-50' : ''}`}
-              >
-                {status === 'none' && <X size={14} className="text-gray-400" />}
-                {status === 'pending' && <UserCheck size={14} className="text-orange-300" />}
-                {status === 'approved' && <Check size={14} className="text-green-500" />}
-                <span className="text-gray-900 font-medium capitalize">{status === 'none' ? 'No approval' : status}</span>
-                {approvalStatus === status && <Check size={12} className="text-purple-700 ml-auto" />}
-              </button>
-            ))}
+        {showApprovalMenu && (
+          <div className="absolute bottom-full mb-2 right-0 bg-white border border-gray-100 rounded-2xl shadow-lg py-1.5 z-50 w-[240px]">
+            <button
+              onClick={() => {
+                setShowApprovalMenu(false);
+                onOpenActivity?.();
+              }}
+              className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors"
+            >
+              <span className="text-gray-900 font-medium">Check approval activity</span>
+            </button>
+            <div className="mx-3 border-t border-gray-100" />
+            <button
+              onClick={() => {
+                onUpdate(block.id, {
+                  approval: { status: 'none', assignees: [] },
+                });
+                setShowApprovalMenu(false);
+              }}
+              className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors"
+            >
+              <span className="text-gray-900 font-medium">Remove approval request</span>
+            </button>
           </div>
         )}
       </div>
+
     </div>
   );
 }

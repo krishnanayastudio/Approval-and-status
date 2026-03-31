@@ -17,7 +17,7 @@ export const initialProject: Project = {
       kind: 'block',
       block: {
         id: 'b2', name: 'User Interviews', type: 'doc', thumbnail: '',
-        completed: true,
+        status: 'done',
         assignee: { name: 'James L.', initials: 'JL' },
         approval: { status: 'approved', assignees: ['James L.'] },
       },

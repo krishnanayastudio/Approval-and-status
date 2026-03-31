@@ -9,6 +9,7 @@ export interface Block {
   dateRange?: { start: string; end: string };
   assignee?: { name: string; initials: string };
   completed?: boolean;
+  status?: 'to-do' | 'in-progress' | 'on-hold' | 'done';
   approval?: {
     status: 'none' | 'pending' | 'approved';
     assignees: string[];

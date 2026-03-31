@@ -8,6 +8,7 @@ import type { Project, Block } from './types';
 function App() {
   const [project, setProject] = useState<Project>(initialProject);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState(0);
 
   const handleReorder = useCallback((fromIndex: number, toIndex: number) => {
     setProject(prev => {
@@ -43,7 +44,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
-      <Navbar projectName={project.name} />
+      <Navbar projectName={project.name} currentUserId={currentUserId} onSwitchUser={setCurrentUserId} />
 
       <div className="relative flex flex-1 min-h-0 overflow-hidden">
         <JourneyCanvas
@@ -52,6 +53,7 @@ function App() {
           onSelectBlock={setSelectedBlockId}
           onUpdateBlock={handleUpdateBlock}
           onReorder={handleReorder}
+          currentUserId={currentUserId}
         />
       </div>
 
