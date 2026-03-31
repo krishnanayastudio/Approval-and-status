@@ -332,7 +332,7 @@ function ItemDot() {
   return <div className="w-2 h-2 rounded-full bg-gray-300 shrink-0 self-center" />;
 }
 
-export function JourneyCanvas({ items, selectedBlockId, onSelectBlock, onUpdateBlock, onReorder, currentUserId }: JourneyCanvasProps) {
+export function JourneyCanvas({ items, onUpdateBlock, onReorder, currentUserId }: JourneyCanvasProps) {
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
   const [toolbarBlockId, setToolbarBlockId] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
