@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  /* ─── Primitive: Purple ─── */
+  --color-purple-50: #FBF8FF;
+  --color-purple-100: #F4ECFF;
+  --color-purple-150: #F1EBFA;
+  --color-purple-200: #E0CBFF;
+  --color-purple-300: #CDAAFF;
+  --color-purple-400: #B989FF;
+  --color-purple-500: #9247FF;
+  --color-purple-600: #6B04FF;
+  --color-purple-700: #4F00C1;
+  --color-purple-750: #5714AC;
+  --color-purple-800: #560AC3;
+  --color-purple-900: #3D0099;
+
+  /* ─── Primitive: Gray ─── */
+  --color-gray-0: #FFFFFF;
+  --color-gray-25: #FAFAFA;
+  --color-gray-50: #F5F5F5;
+  --color-gray-75: #F1F1F1;
+  --color-gray-100: #EBEBEB;
+  --color-gray-150: #E2E2E2;
+  --color-gray-200: #DCDCDC;
+  --color-gray-250: #D7D7D7;
+  --color-gray-300: #C0C0C0;
+  --color-gray-400: #9F9F9F;
+  --color-gray-500: #7E7E7E;
+  --color-gray-600: #696969;
+  --color-gray-700: #5D5D5D;
+  --color-gray-800: #393939;
+  --color-gray-900: #161616;
+  --color-gray-950: #040404;
+  --color-gray-1000: #000000;
+
+  /* ─── Primitive: Red ─── */
+  --color-red-50: #FDF1F0;
+  --color-red-100: #F19F99;
+  --color-red-200: #EE8C84;
+  --color-red-400: #FA4D56;
+  --color-red-500: #E34033;
+  --color-red-700: #DC3545;
+
+  /* ─── Primitive: Green ─── */
+  --color-green-50: #F8FFF1;
+  --color-green-100: #CFE9B6;
+  --color-green-300: #9ED36D;
+  --color-green-500: #16A34A;
+
+  /* ─── Primitive: Cyan ─── */
+  --color-cyan-50: #D3F5FA;
+  --color-cyan-200: #80E5F7;
+  --color-cyan-500: #02CBEF;
+
+  /* ─── Primitive: Yellow ─── */
+  --color-yellow-50: #FFFDF3;
+  --color-yellow-100: #FFEDA0;
+  --color-yellow-400: #F9DB60;
+
+  /* ─── Primitive: Orange ─── */
+  --color-orange-50: #FFEFE2;
+  --color-orange-100: #FFD1AF;
+  --color-orange-300: #FFA35E;
+}
+
+@font-face {
+  font-family: 'Rand';
+  src: local('Rand Medium'), local('Rand');
+  font-weight: 500;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #fff;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
