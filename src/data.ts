@@ -10,6 +10,7 @@ export const initialProject: Project = {
         favorite: true,
         dateRange: { start: 'Mar, 31', end: 'Apr, 01' },
         assignee: { name: 'Sarah K.', initials: 'SK' },
+        approval: { status: 'pending', assignees: ['Sarah K.'] },
       },
     },
     {
@@ -18,6 +19,7 @@ export const initialProject: Project = {
         id: 'b2', name: 'User Interviews', type: 'doc', thumbnail: '',
         completed: true,
         assignee: { name: 'James L.', initials: 'JL' },
+        approval: { status: 'approved', assignees: ['James L.'] },
       },
     },
     {

@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import {
   Image, FileText, Palette, Box, PenTool,
-  MoreHorizontal, ChevronUp, Heart, Calendar, User,
+  MoreHorizontal, ChevronUp, Heart, Calendar, CheckCircle2, Square,
 } from 'lucide-react';
 import type { JourneyItem, Block, BlockGroup } from '../types';
 import { BlockToolbar } from './BlockToolbar';
@@ -79,9 +79,21 @@ function BlockCard({ block, isSelected, onSelect }: { block: Block; isSelected: 
       )}
 
       {/* Bottom metadata row */}
-      {(block.dateRange || block.assignee) && (
+      {(block.dateRange || block.assignee || (block.approval && block.approval.status !== 'none')) && (
         <div className="absolute bottom-[10px] left-[10px] right-[10px]">
           <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-[0px_1px_3px_rgba(0,0,0,0.1)] px-2.5 py-1.5">
+            {block.approval && block.approval.status !== 'none' && (
+              <div className="flex items-center gap-1">
+                {block.approval.status === 'approved' ? (
+                  <CheckCircle2 size={14} className="text-green-500 shrink-0" />
+                ) : (
+                  <Square size={14} className="text-gray-400 shrink-0" />
+                )}
+                <span className={`text-[10px] font-medium whitespace-nowrap ${block.approval.status === 'approved' ? 'text-green-500' : 'text-gray-800'}`}>
+                  {block.approval.status === 'approved' ? 'Approved' : 'Needs approval'}
+                </span>
+              </div>
+            )}
             {block.dateRange && (
               <div className="flex items-center gap-1">
                 <Calendar size={11} className="text-gray-400" />
@@ -92,10 +104,8 @@ function BlockCard({ block, isSelected, onSelect }: { block: Block; isSelected: 
             )}
             <div className="flex items-center gap-1 ml-auto">
               {block.assignee && (
-                <div className="flex items-center gap-1">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-300 to-purple-500 border-2 border-white flex items-center justify-center">
-                    <span className="text-[8px] font-bold text-white">{block.assignee.initials}</span>
-                  </div>
+                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-300 to-purple-500 border-2 border-white flex items-center justify-center">
+                  <span className="text-[8px] font-bold text-white">{block.assignee.initials}</span>
                 </div>
               )}
             </div>

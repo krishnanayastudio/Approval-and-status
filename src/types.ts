@@ -9,6 +9,10 @@ export interface Block {
   dateRange?: { start: string; end: string };
   assignee?: { name: string; initials: string };
   completed?: boolean;
+  approval?: {
+    status: 'none' | 'pending' | 'approved';
+    assignees: string[];
+  };
 }
 
 export interface BlockGroup {
